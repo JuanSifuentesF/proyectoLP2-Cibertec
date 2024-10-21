@@ -1,0 +1,12 @@
+<!-- Footer -->
+<div th:fragment="footer" class="py-3 bg-dark mt-4">
+    <div class="container">
+        <h5 class="m-0 text-center text-white">Copyright &copy; <span id="year"></span> <span th:text="${title}"></span></h5>
+    </div>
+    <script>
+        window.onload = function() {
+            const yearElement = document.getElementById('year');
+            yearElement.textContent = new Date().getFullYear();
+        };
+    </script>
+</div>

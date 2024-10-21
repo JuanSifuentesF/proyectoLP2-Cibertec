@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title th:text="${title}"></title>
+
+    <!-- CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<header th:insert="~{/layouts/header-admin :: header}"></header>
+
+<!-- Container -->
+<div class="container">
+
+    <div class="d-flex justify-content-between align-items-center m-1">
+        <h1 class="mt-4 mb-3" th:text="${titleLibro}"></h1>
+        <h3 th:text="${tituloLibro}"></h3>
+    </div>
+
+    <nav aria-label="breadcrumb" class="bg-light p-2 rounded">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/libros}" th:text="${titleLibros}"></a></li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="${titleLibro}"></li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div>
+            <div class="card border-0 mt-4">
+                <div class="card-body">
+                    <form class="form-horizontal mt-4" id="form-libro" th:action="@{/libros/save}"
+                          th:object="${libro}" method="post"
+                          enctype="multipart/form-data">
+
+                        <div class="row mb-3">
+                            <label for="isbn" class="col-sm-2 col-form-label">ISBN: </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="isbn" placeholder="ISBN del libro"
+                                       th:field="*{isbn}">
+                                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('isbn')}"
+                                     th:errors="*{isbn}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="titulo" class="col-sm-2 col-form-label">Título: </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="titulo" placeholder="Título del libro"
+                                       th:field="*{titulo}">
+                                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('titulo')}"
+                                     th:errors="*{titulo}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="autor" class="col-sm-2 col-form-label">Autor: </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="autor" placeholder="Autor del libro"
+                                       th:field="*{autor}">
+                                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('autor')}"
+                                     th:errors="*{autor}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="paginas" class="col-sm-2 col-form-label">N° de Páginas: </label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="paginas" placeholder="N° de páginas" th:field="*{paginas}">
+                                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('paginas')}"
+                                     th:errors="*{paginas}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="cantidad" class="col-sm-2 col-form-label">Cantidad: </label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="cantidad" placeholder="Cantidad de libros" th:field="*{cantidad}">
+                                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('cantidad')}"
+                                     th:errors="*{cantidad}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="categoria" class="col-sm-2 col-form-label">Categoría: </label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="categoria" th:field="*{categoria}">
+                                    <option value="">Selecciona una categoría</option>
+                                    <option th:each="categoria:${categorias}" th:value="${categoria.idCategoria}" th:text="${categoria.categoria}"></option>
+                                </select>
+                                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('categoria')}"
+                                     th:errors="*{categoria}"></div>
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-3">
+                            <label for="img" class="col-sm-2 col-form-label">Portada: </label>
+                            <div class="col-sm-10">
+                                <input type="file" class="form-control" id="img" name="img">
+                            </div>
+                        </div>
+
+                        <input id="id" name="id" type="text" hidden="hidden" th:field="*{idLibro}">
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <a th:href="@{/libros}" class="btn btn-dark">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:insert="~{/layouts/footer :: footer}"></footer>
+
+<!-- Scripts -->
+<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/sweetalert2.all.min.js}"></script>
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title th:text="${title}"></title>
+
+    <!-- CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<header th:insert="~{/layouts/header-admin :: header}"></header>
+
+<!-- Container -->
+<div class="container">
+
+    <div class="d-flex justify-content-between align-items-center m-1">
+        <h1 class="mt-4 mb-3" th:text="${titlePrestamo}"></h1>
+        <h3 th:if="${modo}" th:text="'Número: ' + *{prestamo.idPrestamo}"></h3>
+    </div>
+
+    <nav aria-label="breadcrumb" class="bg-light p-2 rounded">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/prestamos}" th:text="${titlePrestamos}"></a></li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="${titlePrestamo}"></li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div>
+            <div class="card border-0 mt-4">
+                <div class="card-body">
+                    <form class="form-horizontal mt-4" id="form-prestamo" th:action="@{/prestamos/save}"
+                          th:object="${prestamo}" method="post">
+
+                        <div class="row mb-3">
+                            <label for="libro" class="col-sm-2 col-form-label">Libro: </label>
+                            <div class="col-sm-10">
+                                <input th:if="${modo}" type="text" class="form-control" th:value="${prestamo.libro.titulo}" readonly>
+                                <select th:unless="${modo}" class="form-control" id="libro" th:field="*{libro}">
+                                    <option value="">Seleccione un libro</option>
+                                    <option th:each="libro:${libros}" th:value="${libro.idLibro}" th:text="${libro.titulo}"></option>
+                                </select>
+                                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('libro')}" th:errors="*{libro}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="usuario" class="col-sm-2 col-form-label">Usuario: </label>
+                            <div class="col-sm-10">
+                                <input th:if="${modo}" type="text" class="form-control" th:value="${prestamo.usuario.nombre + ' ' + prestamo.usuario.apellido}" readonly>
+                                <select th:unless="${modo}" class="form-control" id="usuario" th:field="*{usuario}">
+                                    <option value="">Seleccione un usuario</option>
+                                    <option th:each="usuario:${usuarios}" th:value="${usuario.idUsuario}" th:text="${usuario.nombre + ' ' + usuario.apellido}"></option>
+                                </select>
+                                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('usuario')}" th:errors="*{usuario}"></div>
+                            </div>
+                        </div>
+
+                        <div th:if="${modo}" class="row mb-3">
+                            <label for="fecPrestamo" id="fecPrestamo" class="col-sm-2 col-form-label">Fecha de Préstamo: </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" th:value="${#dates.format(prestamo.fecPrestamo, 'dd-MM-yyyy')}" readonly>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="fecDevolucion" class="col-sm-2 col-form-label">Fecha de Devolución: </label>
+                            <div class="col-sm-10">
+                                <input th:if="${modo}" type="text" class="form-control" th:value="${#dates.format(prestamo.fecDevolucion, 'dd-MM-yyyy')}" readonly>
+                                <input th:unless="${modo}" type="date" class="form-control" id="fecDevolucion" th:field="*{fecDevolucion}">
+                                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('fecDevolucion')}" th:errors="*{fecDevolucion}"></div>
+                            </div>
+                        </div>
+
+                        <div th:if="${modo}" class="row mb-3">
+                            <label for="diasRetraso" id="diasRetraso" class="col-sm-2 col-form-label">Días de Retraso: </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" th:value="'' + ${prestamo.diasRetraso} + ' ds.'" readonly>
+                            </div>
+                        </div>
+
+                        <div th:if="${modo != null && montoPago>0}" class="row mb-3">
+                            <label for="montoPago" id="montoPago" class="col-sm-2 col-form-label">Monto Pago: </label>
+                            <div class="col-sm-10">
+                                <input type="text" name="montoPago" class="form-control" th:value="${montoPago}" readonly>
+                            </div>
+                        </div>
+
+                        <div th:if="${modo}" class="row mb-3">
+                            <label for="estado" class="col-sm-2 col-form-label">Estado: </label>
+                            <div class="col-sm-10">
+                                <input th:if="${prestamo.estado.idEstado == 3}" type="text" class="form-control" th:value="${prestamo.estado.estado}" readonly>
+                                <select th:if="${prestamo.estado.idEstado != 3}" class="form-control" id="estado" th:field="*{estado}">
+                                    <option value="">Seleccione un estado</option>
+                                    <option th:each="estado:${estados}" th:value="${estado.idEstado}" th:text="${estado.estado}"></option>
+                                </select>
+                                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></div>
+                            </div>
+                        </div>
+
+                        <input id="id" name="id" type="text" hidden="hidden" th:field="*{idPrestamo}">
+                        <input th:if="${modo}" type="hidden" name="usuario" class="form-control" th:field="${prestamo.usuario}">
+                        <input th:if="${modo}" type="hidden" name="libro" class="form-control" th:field="${prestamo.libro}">
+                        <input th:if="${modo}" type="hidden" name="fecPrestamo" class="form-control" th:field="${prestamo.fecPrestamo}">
+                        <input th:if="${modo}" type="hidden" name="fecDevolucion" class="form-control" th:field="${prestamo.fecDevolucion}">
+                        <input th:if="${modo}" type="hidden" name="diasRetraso" class="form-control" th:field="${prestamo.diasRetraso}">
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <a th:href="@{/prestamos}" class="btn btn-dark">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:insert="~{/layouts/footer :: footer}"></footer>
+
+<!-- Scripts -->
+<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/sweetalert2.all.min.js}"></script>
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>

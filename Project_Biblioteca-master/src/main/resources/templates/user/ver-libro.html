@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title th:text="${title}"></title>
+
+    <!-- CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- Header -->
+<header th:insert="~{/layouts/header-user :: header}"></header>
+
+<!-- Container -->
+<div class="container">
+
+    <div class="d-flex justify-content-between align-items-center m-1">
+        <h1 class="mt-4 mb-3" th:text="${titleLibro}"></h1>
+        <!--h3 th:text="${libro.titulo}"></h3-->
+    </div>
+
+    <nav aria-label="breadcrumb" class="bg-light p-2 rounded">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="${titleLibro}"></li>
+        </ol>
+    </nav>
+
+    <!-- Detalle del Libro -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6 text-center">
+                    <img class="img-fluid rounded" th:src="@{/portadas/{img} (img = ${libro.portada})}" alt="Portada">
+                </div>
+                <div class="col-lg-6">
+                    <form class="text-center" action="" method="post" th:object="${libro}">
+                        <h2 class="card-title font-ar-mt-bold mt-2" th:text="*{titulo}"></h2>
+
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                            </li>
+                            <li class="list-group-item">
+                                <h4 class="" th:text="'ISBN: ' + *{isbn}"></h4>
+                                <h4 class="" th:text="'Autor: ' + *{autor}"></h4>
+                                <h4 class="" th:text="'Categoría: ' + ${libro.categoria.categoria}"></h4>
+                                <h4 class="" th:text="'Estado: ' + ${estado}"></h4>
+                            </li>
+                            <li class="list-group-item">
+                            </li>
+                        </ul>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <a th:href="@{/}" class="btn btn-dark mt-2">Cerrar</a>
+                        </div>
+
+                        <input id="id" name="id" type="text" hidden="hidden" th:field="*{idLibro}">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Libros Aleatorios -->
+    <div class="row justify-content-center mt-4">
+        <h2 class="text-center font-ar-mt-bold" th:text="${titleMasLibros}"></h2>
+        <th:block th:each="randomLibro : ${randomLibros}">
+            <div class="col-lg-3 col-md-6">
+                <div class="card m-2">
+                    <a th:href="@{/libros/detail/{id} (id = ${randomLibro.idLibro})}">
+                        <img class="card-img-top" th:src="@{/portadas/{img} (img = ${randomLibro.portada})}"
+                             alt="Libro">
+                    </a>
+                    <div class="card-body text-center">
+                        <h5 class="card-title font-ar-mt-bold" th:text="${randomLibro.titulo}"></h5>
+                        <div class="text-center">
+                            <a href="#" th:href="@{/libros/detail/{id} (id = ${randomLibro.idLibro})}"
+                               class="btn btn-info">Ver Libro</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+
+</div>
+
+
+<!-- Footer -->
+<footer th:insert="~{/layouts/footer :: footer}"></footer>
+
+<!-- Scripts -->
+<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/sweetalert2.all.min.js}"></script>
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>

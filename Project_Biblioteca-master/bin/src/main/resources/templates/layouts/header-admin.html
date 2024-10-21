@@ -1,0 +1,64 @@
+<div th:fragment="header">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">
+                <h3 class="m-2" th:text="${title}"></h3>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
+                    </li>
+                </ul>
+
+                <!-- Búsqueda -->
+                <form class="d-flex" role="search"  th:action="@{/buscar}" method="post" name="buscar">
+                    <input type="hidden" name="tipo" th:value="${tipo}">
+                    <input class="form-control form-search me-2" type="search" name="buscar" placeholder="Buscar" aria-label="">
+                    <button class="btn btn-outline-success btn-search" type="submit">Buscar</button>
+                </form>
+
+                <ul class="navbar-nav ml-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/libros}">Libros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/prestamos}">Préstamos</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a th:text="'Hola: ' + ${nomUsuario}" class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            ADMIN
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <!--li><h4><a class="dropdown-item" th:href="@{/libros}">Libros</a></h4></li>
+                            <li><h4><a class="dropdown-item" th:href="@{/prestamos}">Préstamos</a></h4></li-->
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a style="color: #842029" class="dropdown-item" th:href="@{/logout}" onclick="alertLogout()">Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="video-wrapper">
+        <video playsinline autoplay muted loop>
+            <source src="/video/Biblioteca.mp4" type="video/mp4">
+            Tu navegador no soporta el video.
+        </video>
+    </div>
+
+
+</div>

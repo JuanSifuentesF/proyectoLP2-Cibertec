@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title th:text="${title}"></title>
+
+    <!-- CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<header th:insert="~{/layouts/header-admin :: header}"></header>
+
+<!-- Container -->
+<div class="container">
+
+    <div class="d-flex justify-content-between align-items-center m-1">
+        <h1 class="mt-4 mb-3" th:text="${titlePrestamos}"></h1>
+        <a class="btn btn-primary" th:href="@{/prestamos/new}">Nuevo Préstamo</a>
+    </div>
+
+    <nav aria-label="breadcrumb" class="bg-light p-2 rounded">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a th:href="@{/prestamos}" th:text="${titlePrestamos}"></a></li>
+        </ol>
+    </nav>
+
+    <div class="table-responsive">
+        <table class="table table-striped mt-4">
+            <thead>
+            <tr>
+                <th scope="col">Libro</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Fec. Préstamo</th>
+                <th scope="col">Fec. Devolución</th>
+                <th scope="col">Retraso</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Acción</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="prestamo : ${prestamos}">
+                <td th:text="${prestamo.libro.titulo}"></td>
+                <td th:text="${prestamo.usuario.nombre + ' ' + prestamo.usuario.apellido}"></td>
+                <td th:text="${#dates.format(prestamo.fecPrestamo, 'dd-MM-yyyy')}"></td>
+                <td th:text="${#dates.format(prestamo.fecDevolucion, 'dd-MM-yyyy')}"></td>
+                <td th:if="*{prestamo.diasRetraso > 0}" th:text="'' + *{prestamo.diasRetraso} + ' ds.'"></td>
+                <td th:if="*{prestamo.diasRetraso <= 0 && prestamo.estado.idEstado == 1}" th:text="'S/R'"></td>
+                <td th:if="*{prestamo.diasRetraso <= 0 && prestamo.estado.idEstado == 3}" th:text="'FN'"></td>
+                <td th:text="${prestamo.estado.estado}"></td>
+                <td>
+                    <div class="d-flex">
+                        <a class="btn btn-warning btn-sm" th:href="@{'prestamos/edit/' + ${prestamo.idPrestamo}}">Editar</a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:insert="~{/layouts/footer :: footer}"></footer>
+
+<!-- Scripts -->
+<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/sweetalert2.all.min.js}"></script>
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>
